@@ -1,0 +1,1 @@
+Bare metal AVR firmware for Arduino Uno written in C++ without Arduino IDE or HAL abstractions. Implements UART communication, LED control, and a command/response protocol by directly manipulating ATmega328P hardware registers. Built and flashed using avr-gcc, avr-libc, and avrdude on Linux.
