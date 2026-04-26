@@ -3,7 +3,6 @@
 #include <string.h>
 #include "uart.h"
 #include "led.h"
-
 int main ()
 {
     //BLINKING LED
@@ -20,11 +19,27 @@ int main ()
 
     //UART
 
+    // while (1)
+    // {
+    //     send_data("hello, world\r\n");
+    //     _delay_ms(1000);
+    // }
+
     initialize_usart();
-    while (1)
+    flush_buffer();
+    send_data("Successfull init\r\n");
+    char buffer[32];
+    while(1)
     {
-        send_data("hello, world\r\n");
-        _delay_ms(1000);
+        receive_string(buffer);
+        if (strcmp(buffer, "ping") == 0)
+        {
+            send_data("pong\r\n");
+        }
+        else
+        {
+            send_data("ERR\r\n");
+        }
     }
     return 0;
 }

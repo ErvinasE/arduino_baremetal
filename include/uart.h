@@ -4,6 +4,8 @@
 #define F_CPU 16000000UL
 
 #define UBRRn (F_CPU / (16UL* BAUD)) - 1
+
+unsigned char maxlen = 32;
 void initialize_usart()
 {
     UBRR0H = 0;
@@ -31,4 +33,31 @@ void send_data(const char* string)
         send_byte(*string);
         string++;
     }
+}
+char receive_byte()
+{
+    while(!(UCSR0A & (1<<RXC0)));
+    return UDR0;
+}
+void receive_string(char* buffer)
+{
+    int i = 0;
+    while(1)
+    {
+        if (i >= maxlen - 1)
+        {
+            flush_buffer();
+            break;
+        }
+        char c = receive_byte();
+        if (c == '\n' || c == '\r') break;
+        buffer[i] = c;
+        i++;
+    }
+    buffer[i] = '\0';
+}
+void flush_buffer()
+{
+    unsigned char t;
+    while (UCSR0A & (1 << RXC0)) t = UDR0;
 }
